@@ -1,0 +1,265 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>iOS观察者模式 | Gridea</title>
+<link rel="shortcut icon" href="https://jashion.github.io/favicon.ico?v=1557905069591">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://jashion.github.io/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://jashion.github.io">
+  <img class="avatar" src="https://jashion.github.io/images/avatar.png?v=1557905069591" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/jashion" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              iOS观察者模式
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-05-15 ·
+              </time>
+              
+                <a href="https://jashion.github.io/tag/OSzgKswH2" class="post-tags">
+                  # KVC
+                </a>
+              
+                <a href="https://jashion.github.io/tag/qnAu3Zggl" class="post-tags">
+                  # KVO
+                </a>
+              
+            </div>
+            
+              <div class="post-feature-image" style="background-image: url('https://jashion.github.io/post-images/ios-guan-cha-zhe-mo-shi.jpg')">
+              </div>
+            
+            <div class="post-content">
+              <h2 id="kvc与kvo简介">KVC与KVO简介</h2>
+<ul>
+<li>KVC<br></li>
+</ul>
+<blockquote>
+<p>KVC（Key-value coding）是一种间接更改对象状态的方式。<br>
+ 官方文档描述：<br>
+ Key-value coding is a mechanism for accessing an  object’s properties indirectly, using strings to identify properties, rather than through invocation of an accessor method or accessing them directly through instance variables. In essence, key-value coding defines the patterns and method signatures that your application’s accessor methods implement.</p>
+</blockquote>
+<!--more-->
+<ul>
+<li>KVC的作用<br></li>
+</ul>
+<blockquote>
+<p>通过键值的方式访问对象或者修改对象的值<br>
+ 比如：NSString *name = [car valueForKey: @&quot;name&quot;];通过-valueForKey:获取对象，它会先查找以参数名命名（格式为-key或-isKey）的getter方法，对于上面的调用，valueForKey:会先寻找-name方法。如果没有这样的getter方法，它将会在对象内寻找名称格式为_key或key的实例变量。通过使用KVC，没有相关getter方法也能获取对象，不需要通过对象指针来直接访问实例变量。</p>
+</blockquote>
+<p> 
+<ul>
+<li>KVC的优缺点<br></li>
+</ul>
+<blockquote>
+<p>1.KVC可以轻松处理集合类。（如：NSArray）<br>
+ 2.KVC没有相关getter方法也能获取对象，不需要通过对象指针来直接访问实例变量<br>
+ 3.简化代码<br>
+ 4.KVC需要解析字符串，速度比较慢<br>
+ 5.编译器无法进行错误检查<br></p>
+</blockquote>
+<ul>
+<li>KVO<br></li>
+</ul>
+<blockquote>
+<p>KVO（Key-value Observing）是基于KVC的，一种监听方式，也就是所谓的观察者模式。<br>
+ 官方文档描述：<br>
+ Key-value observing provides a mechanism that allows objects to be notified of changes to specific properties of other objects. It is particularly useful for communication between model and controller layers in an application.</p>
+</blockquote>
+<h2 id="kvc代码实现">KVC代码实现</h2>
+<pre><code>//1.setValue: forKey
+[car setValue: @&quot;奔驰&quot; forKey: @&quot;name&quot;];
+[car setValue: [NSNumber numberWithFloat: 80] forKey: @&quot;speed&quot;];
+[car setValue: @&quot;黑色&quot; forKey: @&quot;carPaint&quot;];
+
+//1.valueForKey
+NSString *name = [currentCar valueForKey: @&quot;name&quot;];
+NSNumber *speed = [currentCar valueForKey: @&quot;speed&quot;];
+NSString *carPaint = [currentCar valueForKey: @&quot;carPaint&quot;];
+
+//2.setValue:forKeyPath
+[car setValue: [NSNumber numberWithFloat: 40] forKeyPath: @&quot;engine.horsepower&quot;];
+self.showCarDetail.text = [self showCarDetail: car];
+
+//2.valueForKeyPath
+NSNumber *horsepower = [currentCar valueForKeyPath: @&quot;engine.horsepower&quot;];
+
+//3.整体操作:访问数组，如果使用某个键值来访问一个NSArray数组，它实际上会查询相应数组中的每个对象，然后将查询结果大包到另一个数组并返回，但是不能直接在建路径中索引这些数组，如：tires[0].pressure
+NSArray *pressures = [currentCar valueForKeyPath: @&quot;tires.pressure&quot;];
+NSLog(@&quot;%@&quot;, pressures);
+
+//4.快速运算@count,@sum,@avg,@min,@max,@distinctUnionOfObjects
+NSNumber *count = [currentCar valueForKeyPath: @&quot;tires.@count&quot;];    //对左边键值返回数组操作，获取数组数量
+NSNumber *sum = [currentCar valueForKeyPath: @&quot;tires.@sum.pressure&quot;];    //对左边键值返回数组操作，获取每个数组里面的pressure值，求和
+NSNumber *avg = [currentCar valueForKeyPath: @&quot;tires.@avg.pressure&quot;];    //对左边键值返回数组操作，获取每个数组里面的pressure值，求平均值
+NSNumber *min = [currentCar valueForKeyPath: @&quot;tires.@min.pressure&quot;];    //对左边键值返回数组操作，获取每个数组里面的pressure值，找出最小值
+NSNumber *max = [currentCar valueForKeyPath: @&quot;tires.@max.pressure&quot;];    //对左边键值返回数组操作，获取每个数组里面的pressure值，找出最大值
+NSArray *tireType = [currentCar valueForKeyPath: @&quot;tires.@distinctUnionOfObjects.pressure&quot;];    //对左边键值返回数组操作，获取每个数组里面的pressure值，去掉重复的值，返回一个包含所有不重复值的数组
+NSLog(@&quot;TiresCount: %@ Sum: %@, Avg: %@, Min: %@, Max: %@, TireType: %@&quot;, count, sum, avg, min, max, tireType);
+
+//5.批处理
+//字典里面不能为nil，如果返回值有nil，则KVC会自己处理，将返回[NSNull null]表示nil
+//&lt;null&gt;和(null)的区别：前者是[NSNull null]对象，而后者是正真的nil。
+NSArray *keys = [NSArray arrayWithObjects: @&quot;make&quot;, @&quot;modelYear&quot;, @&quot;numberOfDoors&quot;, nil];
+NSDictionary *carValues = [currentCar dictionaryWithValuesForKeys: keys];
+NSLog(@&quot;%@&quot;, carValues);
+    
+//6.nil处理
+//可以自己运行一下，重写和没有重写setNilValueForKey:方法的代码
+[currentCar setValue: nil forKey: @&quot;speed&quot;];
+NSLog(@&quot;carSpeed: %@&quot;, [currentCar valueForKey: @&quot;speed&quot;]);
+    
+//7.处理未定义的值
+[currentCar setValue: [NSNumber numberWithFloat: 1500] forKey: @&quot;mileage&quot;];
+[currentCar setValue: [NSNull null] forKey: @&quot;price&quot;];
+[currentCar setValue: nil forKey: @&quot;capacity&quot;];
+NSLog(@&quot;Mileage: %@ Price: %@, Capacity: %@&quot;, [currentCar valueForKey: @&quot;mileage&quot;], [currentCar valueForKey: @&quot;price&quot;], [currentCar valueForKey: @&quot;capacity&quot;]);
+
+//8.KVC有自动装箱的功能，当使用valueForKey时，它自动将标量值（int,float,struct...）放入NSNumber或NSValue中；当使用setValueForKey，它自动将标量值从这些对象取出。
+
+</code></pre>
+<h2 id="kvo代码实现">KVO代码实现</h2>
+<pre><code>//应该在监听者里添加监听，而不是在被监听者里添加监听
+//在被监听者添加监听会造成循环引用的问题
+car = [[Car alloc] init];
+[car addObserver: self forKeyPath: @&quot;carPaint&quot; options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context: nil];
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context {
+    if ([keyPath isEqualToString: @&quot;carPaint&quot;]) {
+        NSLog(@&quot;%@&quot;, [change objectForKey: @&quot;new&quot;]);    //修改之后的值
+        self.showCarDetail.text = [NSString stringWithFormat: @&quot;车的颜色是%@&quot;, [change objectForKey: @&quot;new&quot;]];
+    }
+}
+
+- (void)dealloc {
+    //监听者应该是self，被监听者是car
+    [car removeObserver: self forKeyPath: @&quot;carPaint&quot;];
+}
+
+</code></pre>
+<h2 id="demo展示br">Demo展示：<br></h2>
+<p><img src="http://jashion.b0.upaiyun.com/images/iOSObserving.gif" alt="Observer.gif"></p>
+<p><a href="https://github.com/jashion/iOSObserving">Demo下载</a></p>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://jashion.github.io/post/ios-de-tu-pian-kuang-jia">
+              <h3 class="post-title">
+                iOS的图片框架
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'a7153cf3069552a0b78f',
+    clientSecret: '489d22456529a869602660f4b131859603038a0d',
+    repo: 'jashion.github.io',
+    owner: 'Jashion',
+    admin: ['Jashion'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+    
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
