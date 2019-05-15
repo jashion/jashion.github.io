@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>iOS的图片框架 | Gridea</title>
-<link rel="shortcut icon" href="https://jashion.github.io/favicon.ico?v=1557904171584">
+<link rel="shortcut icon" href="https://jashion.github.io/favicon.ico?v=1557904495069">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://jashion.github.io/styles/main.css">
 
@@ -18,7 +18,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://jashion.github.io">
-  <img class="avatar" src="https://jashion.github.io/images/avatar.png?v=1557904171584" alt="">
+  <img class="avatar" src="https://jashion.github.io/images/avatar.png?v=1557904495069" alt="">
   </a>
   <h1 class="site-title">
     Gridea
@@ -93,8 +93,8 @@
 <p>今年五月份进的新公司，接手的第一个新项目，里面我主要负责发帖，具体是图文，不包括视频。由于时间紧急，开发时间只有3天，实际上包括开发，测试和修复BUG，用了差不多3周的时间，第一周开发完成基本功能，后面两周测试和修复BUG,由于当时没有做过相册相关的功能，也因为时间紧急，所以，使用了一个<a href="https://github.com/zhuochenming/ImagePickerController">第三方的库</a>，大家可以去看一下，写的比较全面。后来，项目完成之后，终于有时间，静下心慢慢研究iOS的图片框架了，个人对于不懂的东西，好奇心和求知欲还是比较强的。</p>
 <!--more-->
 <h2 id="一ios8以前的assetslibrary框架">一.iOS8以前的AssetsLibrary框架</h2>
-<p>我感觉，AssetsLibrary框架还是比较好用的，不过iOS9以后就被弃用了，使用iOS8出来的Photos框架，相比于AssetsLibrary更为强大，效率更高。具体的<a href="https://developer.apple.com/library/ios/documentation/AssetsLibrary/Reference/ALAssetsLibrary_Class/">文档</a>可以去苹果官方浏览，这里只详述自己研究的一些东西。<p>
-AssetsLibrary框架只有6个文件，非常简洁：&lt;br &gt;</p>
+<p>我感觉，AssetsLibrary框架还是比较好用的，不过iOS9以后就被弃用了，使用iOS8出来的Photos框架，相比于AssetsLibrary更为强大，效率更高。具体的<a href="https://developer.apple.com/library/ios/documentation/AssetsLibrary/Reference/ALAssetsLibrary_Class/">文档</a>可以去苹果官方浏览，这里只详述自己研究的一些东西。
+AssetsLibrary框架只有6个文件，非常简洁：</p>
 <pre><code>//该文件主要作用是引进头文件
 AssetsLibrary.h 
 
@@ -113,8 +113,8 @@ ALAssetsFilter.h
 //assets的集合，比如：相册
 ALAssetsGroup.h
 </code></pre>
-<p>下面讲解主要用到的一些操作：&lt;br &gt;</p>
-<h3 id="1iphone手机在获取本地相册和视频的时候需要得到本人的许可认证所以第一步是获取判断认证状态-br">1.iPhone手机在获取本地相册和视频的时候，需要得到本人的许可认证，所以，第一步是获取判断，认证状态。&lt;br &gt;</h3>
+<p>下面讲解主要用到的一些操作：</p>
+<h3 id="1iphone手机在获取本地相册和视频的时候需要得到本人的许可认证所以第一步是获取判断认证状态">1.iPhone手机在获取本地相册和视频的时候，需要得到本人的许可认证，所以，第一步是获取判断，认证状态。</h3>
 <pre><code>//ALAuthorizationStatusNotDetermined  //用户还没做出选择
 //ALAuthorizationStatusRestricted  	  //用户受到某些限制，不能自己决定，比如：家长控制
 //ALAuthorizationStatusDenied	      //用户明确否决
@@ -123,7 +123,7 @@ ALAssetsGroup.h
 [ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized
 //判断状态是否是准许，如果允许则可以获取本地相册，否则，不能获取，则可以提示需要用户做什么操作才能打开本地相册
 </code></pre>
-<h3 id="2获取本地相册以及相册相关的一些信息比如缩略图相册名称等等-br">2.获取本地相册，以及相册相关的一些信息，比如：缩略图，相册名称等等。&lt;br &gt;</h3>
+<h3 id="2获取本地相册以及相册相关的一些信息比如缩略图相册名称等等">2.获取本地相册，以及相册相关的一些信息，比如：缩略图，相册名称等等。</h3>
 <pre><code>//1.获取相册
 @property (nonatomic, strong) ALAssetsLibrary *assetsLibrary;  //ALAssetsLibrary实例必须被controller强引用或者是实例变量，不然会报错
 
@@ -240,18 +240,18 @@ ALAssetsLibraryChangedNotification
 - (BOOL)addAsset:(ALAsset *)asset    //不过没有找到将一张图片变成asset的方法，只能先保存在Camera Roll/My Photo Stream然后获得该图片的asset再保存在特定的相册，不过由于是同一个asset，所以，一旦删除一个，所有相册中的这张图片都会被删除
 
 </code></pre>
-<h3 id="3据说是一些坑点-br">3.据说是一些坑点 &lt;br &gt;</h3>
+<h3 id="3据说是一些坑点">3.据说是一些坑点</h3>
 <ul>
 <li>
-<p>ALAssetsLibrary实例必须被controller强引用或者是实例变量，不然会报错。(已亲自试验，会报错。)&lt;br &gt;</p>
+<p>ALAssetsLibrary实例必须被controller强引用或者是实例变量，不然会报错。(已亲自试验，会报错。)</p>
 </li>
 <li>
-<p>AssetsLibrary 遵循写入优先原则。(<a href="http://kayosite.com/ios-development-and-detail-of-photo-framework.html">原帖出处</a>，没有试验过。)&lt;br &gt;
+<p>AssetsLibrary 遵循写入优先原则。(<a href="http://kayosite.com/ios-development-and-detail-of-photo-framework.html">原帖出处</a>，没有试验过。)
 AssetsLibrary 读取资源的过程中，有任何其它的进程（不一定是同一个 App）在保存资源时，就会收到 ALAssetsLibraryChangedNotification，让用户自行中断读取操作。最常见的就是读取 fullResolutionImage 时，这时候再在别的进程写入，由于读取 fullResolutionImage 耗时较长，很容易就会 exception。</p>
 </li>
 <li>
-<p>开启 Photo Stream 容易导致 exception。(<a href="http://kayosite.com/ios-development-and-detail-of-photo-framework.html">原帖出处</a>，没有试验过。)&lt;br &gt;
-如果用户开启了共享照片流（Photo Stream），共享照片流会以 mstreamd 的方式“偷偷”执行，当有人把相片写入 Camera Roll 时，它就会自动保存到 Photo Stream Album 中，如果用户刚好在读取，那就跟上面说的一样产生 exception 了。由于共享照片流是用户决定是否要开启的，所以开发者无法改变，但是可以通过下面的接口在需要保护的时刻关闭监听共享照片流产生的频繁通知信息。&lt;br &gt;
+<p>开启 Photo Stream 容易导致 exception。(<a href="http://kayosite.com/ios-development-and-detail-of-photo-framework.html">原帖出处</a>，没有试验过。)
+如果用户开启了共享照片流（Photo Stream），共享照片流会以 mstreamd 的方式“偷偷”执行，当有人把相片写入 Camera Roll 时，它就会自动保存到 Photo Stream Album 中，如果用户刚好在读取，那就跟上面说的一样产生 exception 了。由于共享照片流是用户决定是否要开启的，所以开发者无法改变，但是可以通过下面的接口在需要保护的时刻关闭监听共享照片流产生的频繁通知信息。
 保护措施：</p>
 <pre><code>[ALAssetsLibrary disableSharedPhotoStreamsSupport];  //禁止图片共享
 </code></pre>
@@ -259,7 +259,7 @@ AssetsLibrary 读取资源的过程中，有任何其它的进程（不一定是
 </ul>
 <h2 id="二ios8以后使用更为强大的photos框架">二.iOS8以后，使用更为强大的Photos框架</h2>
 <p>Photos框架包括两个库Photos和PhotoUI，而PhotoUI主要是用来显示iOS9新增的Photo类型，LivePhoto说白了就是苹果新增的GIF,不过只能在iphone6以后发布的机型拍摄LivePhoto，下面也会介绍到这个新的图片类型。Let's begin!
-Photos库比ALAssetLibrary库复杂很多，相对的，功能强大很多，下面简述一下各个文件的作用：&lt;br &gt;</p>
+Photos库比ALAssetLibrary库复杂很多，相对的，功能强大很多，下面简述一下各个文件的作用：</p>
 <h4 id="tips-升级ios10之后需要把在plist文件中添加所用的隐私权限比如本应用获取相机权限获取本地相册权限获取本地视频权限等等不然后crash掉没得商量苹果依然霸道如初">Tips: 升级iOS10之后，需要把在plist文件中添加所用的隐私权限，比如本应用：获取相机权限，获取本地相册权限，获取本地视频权限等等，不然后Crash掉，没得商量，苹果依然霸道如初。</h4>
 <h3 id="1interacting-with-the-photos-library与photos库的交互">1.Interacting with the Photos Library(与Photos库的交互)</h3>
 <pre><code>PHPhotoLibrary
